@@ -98,6 +98,13 @@ function love.keyboard.wasPressed(key)
     end
 end
 
+function love.mousepressed(button)
+    if button == "l" then
+       return true
+    end
+    return false
+ end
+
 function love.update(dt)
     
     -- scroll background, used across all states
