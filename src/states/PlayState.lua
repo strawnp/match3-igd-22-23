@@ -275,14 +275,10 @@ function PlayState:render()
     love.graphics.printf('Timer: ' .. tostring(self.timer), 20, 108, 182, 'center')
 end
 
-
-
 --x-cord start 240
 --x-cord end 492
-
 --y-cord start 16 
 --y-cord end 272
---8tiles
 function cordsconvert()
     local x, y = love.mouse.getPosition()
     x,y = push:toGame(x,y)
