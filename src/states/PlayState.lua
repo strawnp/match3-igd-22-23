@@ -1,3 +1,4 @@
+---@diagnostic disable: cast-local-type
 --[[
     GD50
     Match-3 Remake
@@ -122,8 +123,8 @@ function PlayState:update(dt)
         end
 
         -- if we've pressed enter, to select or deselect a tile...
-        if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') or love.mouse.isDown('1') then
-            if love.mouse.isDown('1') then
+        if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') or love.mouse.isDown(1) then
+            if love.mousereleased("1") then 
                 --x-cord start 240
                 --x-cord end 492
 

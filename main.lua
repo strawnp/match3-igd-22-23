@@ -1,3 +1,4 @@
+---@diagnostic disable: lowercase-global
 --[[
     GD50
     Match-3 Remake
@@ -98,8 +99,8 @@ function love.keyboard.wasPressed(key)
     end
 end
 
-function love.mousepressed(button)
-    if button == "l" then
+function love.mousereleased(button)
+    if button == "1" then
        return true
     end
     return false

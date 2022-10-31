@@ -1,3 +1,4 @@
+---@diagnostic disable: lowercase-global
 --[[
     GD50
     Match-3 Remake
