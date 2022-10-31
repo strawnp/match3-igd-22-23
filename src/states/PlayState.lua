@@ -1,3 +1,4 @@
+---@diagnostic disable: cast-local-type
 --[[
     GD50
     Match-3 Remake
@@ -122,12 +123,24 @@ function PlayState:update(dt)
         end
 
         -- if we've pressed enter, to select or deselect a tile...
-        if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+        if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') or love.mouse.isDown(1) then
+            if love.mousereleased("1") then 
+                --x-cord start 240
+                --x-cord end 492
 
+                --y-cord start 16 
+                --y-cord end 272
+                local mouse_x,mouse_y = cordsconvert() --comnvert cords to tile-cords
+                if( mouse_x > 240 and mouse_x < 492 and mouse_y > 16 and mouse_y < 272) then
+                    self.boardHighlightX = math.floor((mouse_x - 240) / 32) --each tile is 32 in size
+                    self.boardHighlightY = math.floor((mouse_y - 16) / 32)
+                    --print(self.boardHighlightX, self.boardHighlightY)
+                end
+            end
             -- if same tile as currently highlighted, deselect
             local x = self.boardHighlightX + 1
             local y = self.boardHighlightY + 1
-
+            
             -- if nothing is highlighted, highlight current tile
             if not self.highlightedTile then
                 self.highlightedTile = self.board.tiles[y][x]
@@ -264,4 +277,14 @@ function PlayState:render()
     love.graphics.printf('Score: ' .. tostring(self.score), 20, 52, 182, 'center')
     love.graphics.printf('Goal : ' .. tostring(self.scoreGoal), 20, 80, 182, 'center')
     love.graphics.printf('Timer: ' .. tostring(self.timer), 20, 108, 182, 'center')
+end
+
+--x-cord start 240
+--x-cord end 492
+--y-cord start 16 
+--y-cord end 272
+function cordsconvert()
+    local x, y = love.mouse.getPosition()
+    x,y = push:toGame(x,y)
+    return x,y
 end

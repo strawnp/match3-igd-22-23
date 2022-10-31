@@ -21,6 +21,8 @@ function BeginGameState:init()
 
     -- spawn a board and place it toward the right
     self.board = Board(VIRTUAL_WIDTH - 272, 16)
+    
+
 
     -- start our level # label off-screen
     self.levelLabelY = -64
@@ -37,14 +39,14 @@ function BeginGameState:enter(def)
     --
 
     -- first, over a period of 1 second, transition our alpha to 0
-    Timer.tween(2, {
+    Timer.tween(1, {
         [self] = {transitionAlpha = 0}
     })
     
     -- once that's finished, start a transition of our text label to
     -- the center of the screen over 0.25 seconds
     :finish(function()
-        Timer.tween(1, {
+        Timer.tween(0.25, {
             [self] = {levelLabelY = VIRTUAL_HEIGHT / 2 - 8}
         })
         

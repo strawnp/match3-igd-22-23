@@ -1,3 +1,4 @@
+---@diagnostic disable: redundant-parameter
 StateMachine = Class{}
 
 function StateMachine:init(states)
