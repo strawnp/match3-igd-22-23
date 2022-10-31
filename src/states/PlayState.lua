@@ -39,6 +39,7 @@ function PlayState:init()
 
     self.score = 0
     self.timer = 60
+    self.gameType = math.random(1, 2)
 
     -- set our Timer class to turn cursor highlight on and off
     Timer.every(0.5, function()
@@ -47,10 +48,11 @@ function PlayState:init()
 
     -- subtract 1 from timer every second
     Timer.every(1, function()
+      if self.gameType == 1 then
         self.timer = self.timer - 1
-
+      end
         -- play warning sound on timer if we get low
-        if self.timer <= 5 then
+        if self.timer <= 5 or self.moves <= 3 then
             gSounds['clock']:play()
         end
     end)
@@ -67,6 +69,8 @@ function PlayState:enter(params)
     -- grab score from params if it was passed
     self.score = params.score or 0
 
+    self.moves = 7 + params.level * math.random(9, 11)
+
     -- score we have to reach to get to the next level
     self.scoreGoal = self.level * 1.25 * 1000
 end
@@ -77,7 +81,7 @@ function PlayState:update(dt)
     end
 
     -- go back to start if time runs out
-    if self.timer <= 0 then
+    if self.timer <= 0 or self.moves <= 0 then
 
         -- clear timers from prior PlayStates
         Timer.clear()
@@ -155,7 +159,9 @@ function PlayState:update(dt)
                 gSounds['error']:play()
                 self.highlightedTile = nil
             else
-
+                if self.gameType ~= 1 then
+                  self.moves = self.moves - 1
+                end
                 -- swap grid positions of tiles
                 local tempX = self.highlightedTile.gridX
                 local tempY = self.highlightedTile.gridY
@@ -205,6 +211,7 @@ function PlayState:calculateMatches()
     if matches then
         gSounds['match']:stop()
         gSounds['match']:play()
+
         if self.timer < 115 then
           self.timer = self.timer + 5
         else
@@ -276,7 +283,11 @@ function PlayState:render()
     love.graphics.printf('Level: ' .. tostring(self.level), 20, 24, 182, 'center')
     love.graphics.printf('Score: ' .. tostring(self.score), 20, 52, 182, 'center')
     love.graphics.printf('Goal : ' .. tostring(self.scoreGoal), 20, 80, 182, 'center')
-    love.graphics.printf('Timer: ' .. tostring(self.timer), 20, 108, 182, 'center')
+    if self.gameType == 1 then
+      love.graphics.printf('Timer: ' .. tostring(self.timer), 20, 108, 182, 'center')
+    else
+      love.graphics.printf('Moves: ' .. tostring(self.moves), 20, 108, 182, 'center')
+    end
 end
 
 --x-cord start 240
