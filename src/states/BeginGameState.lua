@@ -29,9 +29,13 @@ function BeginGameState:init()
 end
 
 function BeginGameState:enter(def)
+
     
+
     -- grab level # from the def we're passed
     self.level = def.level
+
+    self.highscore = def.highscore
 
     --
     -- animate our white screen fade-in, then animate a drop-down with
@@ -52,7 +56,7 @@ function BeginGameState:enter(def)
         
         -- after that, pause for one second with Timer.after
         :finish(function()
-            Timer.after(3, function()
+            Timer.after(1, function()
                 
                 -- then, animate the label going down past the bottom edge
                 Timer.tween(2, {
@@ -63,7 +67,8 @@ function BeginGameState:enter(def)
                 :finish(function()
                     gStateMachine:change('play', {
                         level = self.level,
-                        board = self.board
+                        board = self.board,
+                        highscore = self.highscore
                     })
                 end)
             end)

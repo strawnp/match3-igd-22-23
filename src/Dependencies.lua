@@ -40,6 +40,8 @@ require 'src/states/BeginGameState'
 require 'src/states/GameOverState'
 require 'src/states/PlayState'
 require 'src/states/StartState'
+require 'src/states/EnterHighScoreState'
+require 'src/states/HighScoreState'
 
 gSounds = {
     ['music'] = love.audio.newSource('sounds/music3.mp3', 'static'),
@@ -48,7 +50,8 @@ gSounds = {
     ['match'] = love.audio.newSource('sounds/match.wav', 'static'),
     ['clock'] = love.audio.newSource('sounds/clock.wav', 'static'),
     ['game-over'] = love.audio.newSource('sounds/game-over.wav', 'static'),
-    ['next-level'] = love.audio.newSource('sounds/next-level.wav', 'static')
+    ['next-level'] = love.audio.newSource('sounds/next-level.wav', 'static'),
+    ['victory'] = love.audio.newSource('sounds/victory.wav', 'static')
 }
 
 gTextures = {

@@ -69,6 +69,8 @@ function PlayState:enter(params)
 
     -- score we have to reach to get to the next level
     self.scoreGoal = self.level * 1.25 * 1000
+
+    self.highScores = params.highScores
 end
 
 function PlayState:update(dt)
@@ -85,7 +87,8 @@ function PlayState:update(dt)
         gSounds['game-over']:play()
 
         gStateMachine:change('game-over', {
-            score = self.score
+            score = self.score,
+            highScores = self.highScores
         })
     end
 
@@ -102,7 +105,8 @@ function PlayState:update(dt)
         -- change to begin game state with new level (incremented)
         gStateMachine:change('begin-game', {
             level = self.level + 1,
-            score = self.score
+            score = self.score,
+            highscores = self.highScores
         })
     end
 
@@ -124,7 +128,7 @@ function PlayState:update(dt)
 
         -- if we've pressed enter, to select or deselect a tile...
         if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') or love.mouse.isDown(1) then
-            if love.mousereleased("1") then 
+            if love.mousereleased("1") then
                 --x-cord start 240
                 --x-cord end 492
 

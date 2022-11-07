@@ -15,6 +15,9 @@
 local positions = {}
 
 StartState = Class{__includes = BaseState}
+function StartState:enter(params)
+    self.highScores = params.highScores
+end
 
 function StartState:init()
     
@@ -72,10 +75,25 @@ function StartState:update(dt)
 
     -- as long as can still input, i.e., we're not in a transition...
     if not self.pauseInput then
+        --menu starts on 1???
         
         -- change menu selection
-        if love.keyboard.wasPressed('up') or love.keyboard.wasPressed('down') then
-            self.currentMenuItem = self.currentMenuItem == 1 and 2 or 1
+        if love.keyboard.wasPressed('down') and self.currentMenuItem ~= 1 then
+            --start = 1
+            --highscore = 3
+            --quit = 2
+            self.currentMenuItem = self.currentMenuItem  - 1
+            gSounds['select']:play()
+        
+    elseif love.keyboard.wasPressed('down') and self.currentMenuItem == 1 then
+            self.currentMenuItem = 3
+            gSounds['select']:play()
+    elseif love.keyboard.wasPressed('up') and self.currentMenuItem ~= 3 then
+            self.currentMenuItem = self.currentMenuItem  + 1
+            gSounds['select']:play()
+        
+    elseif love.keyboard.wasPressed('up') and self.currentMenuItem == 3 then
+            self.currentMenuItem = 1
             gSounds['select']:play()
         end
 
@@ -89,20 +107,32 @@ function StartState:update(dt)
                     [self] = {transitionAlpha = 1}
                 }):finish(function()
                     gStateMachine:change('begin-game', {
-                        level = 1
+                        level = 1,
+                        highScores = self.highscore
                     })
 
                     -- remove color timer from Timer
                     self.colorTimer:remove()
                 end)
+            elseif self.currentMenuItem == 2 then
+                Timer.tween(0.75, {
+                    [self] = {transitionAlpha = 1}
+                }):finish(function()
+                    gStateMachine:change('high-score', {
+                        highScores = self.highScores
+                    })
+                end)
             else
                 love.event.quit()
             end
+        
 
             -- turn off input during transition
             self.pauseInput = true
         end
     end
+
+
 
     -- update our Timer, which will be used for our fade transitions
     Timer.update(dt)
@@ -164,34 +194,45 @@ end
     Draws "Start" and "Quit Game" text over semi-transparent rectangles.
 ]]
 function StartState:drawOptions(y)
-    
+
     -- draw rect behind start and quit game text
     love.graphics.setColor(1, 1, 1, 128/255)
-    love.graphics.rectangle('fill', VIRTUAL_WIDTH / 2 - 76, VIRTUAL_HEIGHT / 2 + y, 150, 58, 6)
+    love.graphics.rectangle('fill', VIRTUAL_WIDTH / 2 - 76, VIRTUAL_HEIGHT / 2 + y, 150, 80, 6)
 
-    -- draw Start text
-    love.graphics.setFont(gFonts['medium'])
-    self:drawTextShadow('Start', VIRTUAL_HEIGHT / 2 + y + 8)
-    
     if self.currentMenuItem == 1 then
+        love.graphics.setFont(gFonts['medium'])
+        self:drawTextShadow('Start', VIRTUAL_HEIGHT / 2 + y + 8)
+        
+       
         love.graphics.setColor(99/255, 155/255, 1, 1)
-    else
+        love.graphics.printf('Start', 0, VIRTUAL_HEIGHT / 2 + y + 8, VIRTUAL_WIDTH, 'center')
         love.graphics.setColor(48/255, 96/255, 130/255, 1)
-    end
+        -- draw Quit Game text
+        love.graphics.setFont(gFonts['medium'])
+        love.graphics.printf("highScores", 0, VIRTUAL_HEIGHT / 2 + y +58, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Quit Game', 0, VIRTUAL_HEIGHT / 2 + y + 33, VIRTUAL_WIDTH, 'center')
+        self:drawTextShadow('Quit Game', VIRTUAL_HEIGHT / 2 + y + 33)
+        self:drawTextShadow("highScores", VIRTUAL_HEIGHT / 2 + y +58)
     
-    love.graphics.printf('Start', 0, VIRTUAL_HEIGHT / 2 + y + 8, VIRTUAL_WIDTH, 'center')
+    elseif self.currentMenuItem == 2 then
+        self:drawTextShadow("highScores", VIRTUAL_HEIGHT / 2 + y +58)
+        love.graphics.setColor(99/255, 155/255, 1, 1)
+        love.graphics.printf("highScores", 0, VIRTUAL_HEIGHT / 2 + y +58, VIRTUAL_WIDTH, 'center')
+        love.graphics.setFont(gFonts['medium'])
+        love.graphics.setColor(48/255, 96/255, 130/255, 1)
+        self:drawTextShadow('Quit Game', VIRTUAL_HEIGHT / 2 + y + 33)
+        self:drawTextShadow('Start', VIRTUAL_HEIGHT / 2 + y + 8)
+    else
+        self:drawTextShadow('Start', VIRTUAL_HEIGHT / 2 + y + 8)
+        love.graphics.setColor(99/255, 155/255, 1, 1)
+        love.graphics.printf('Quit Game', 0, VIRTUAL_HEIGHT / 2 + y + 33, VIRTUAL_WIDTH, 'center')
+        love.graphics.setFont(gFonts['medium'])
+        love.graphics.setColor(48/255, 96/255, 130/255, 1)
+        self:drawTextShadow('Start', VIRTUAL_HEIGHT / 2 + y + 8)
+        self:drawTextShadow("highScores", VIRTUAL_HEIGHT / 2 + y +58)
 
-    -- draw Quit Game text
-    love.graphics.setFont(gFonts['medium'])
-    self:drawTextShadow('Quit Game', VIRTUAL_HEIGHT / 2 + y + 33)
-    
-    if self.currentMenuItem == 2 then
-        love.graphics.setColor(99/255, 155/255, 1, 1)
-    else
-        love.graphics.setColor(48/255, 96/255, 130/255, 1)
     end
     
-    love.graphics.printf('Quit Game', 0, VIRTUAL_HEIGHT / 2 + y + 33, VIRTUAL_WIDTH, 'center')
 end
 
 --[[
