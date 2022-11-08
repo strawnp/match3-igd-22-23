@@ -44,8 +44,12 @@ VIRTUAL_HEIGHT = 288
 -- speed at which our background texture will scroll
 BACKGROUND_SCROLL_SPEED = 80
 
+-- borgar
+numShuf = 0
+numIt = 0
+
 function love.load()
-    
+
     -- window bar title
     love.window.setTitle('Match 3')
 
@@ -85,7 +89,7 @@ function love.resize(w, h)
 end
 
 function love.keypressed(key)
-    
+
     -- add to our table of keys pressed this frame
     love.keyboard.keysPressed[key] = true
 end
@@ -99,10 +103,10 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
-    
+
     -- scroll background, used across all states
     backgroundX = backgroundX - BACKGROUND_SCROLL_SPEED * dt
-    
+
     -- if we've scrolled the entire image, reset it to 0
     if backgroundX <= -1024 + VIRTUAL_WIDTH - 4 + 51 then
         backgroundX = 0
@@ -118,7 +122,16 @@ function love.draw()
 
     -- scrolling background drawn behind every state
     love.graphics.draw(gTextures['background'], backgroundX, 0)
-    
+
+    borgar()
+
     gStateMachine:render()
     push:finish()
+end
+
+function borgar()
+  love.graphics.setFont(gFonts['small'])
+  love.graphics.setColor(0, 255/255, 0, 255/255)
+  love.graphics.print('shuffle: ' .. tostring(numShuf), 10, VIRTUAL_HEIGHT - 20)
+  love.graphics.print('iterations: ' .. tostring(numIt), 10, VIRTUAL_HEIGHT - 10)
 end
