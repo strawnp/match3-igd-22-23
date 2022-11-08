@@ -263,31 +263,102 @@ function Board:render()
     end
 end
 
+
+
 function Board:shuffle()
+love.graphics.print("borgar_0", 0, 50)
+  -- Colton
+  --[[
   -- make board into a 1d list
-  local sort, marker = {}, 1
+  math.randomseed(os.time())
+  local pairs, shuf = {}, {{}, {}, {}, {}, {}, {}, {}, {}}
+
+  -- while ~flag_0 do
+    for y = 1, #self.tiles do
+      for x = 1, #self.tiles[y] do
+        local flag_1 = false
+        love.graphics.print("borgar_1", 0, 10)
+        while not flag_1 do
+          local nY, nX = math.random(8), math.random(8)
+          love.graphics.print("borgar_2", 0, 20)
+          for i = 1, #pairs - 1, 2 do
+            if not (nY == pairs[i] and nX == pairs[i + 1]) then
+              flag_1 = true
+              table.insert(pairs, nY)
+              table.insert(pairs, nX)
+
+              -- table.insert(shuf[nY], self.tiles[y][x])
+              shuf[nY][nX] = self.tiles[y][x]
+              shuf[nY][nX].gridY, shuf[nY][nX].gridX = nY, nX
+              numIt = numIt + 1
+            end
+          end
+        end
+      end
+    end
+  -- end
 
   for y = 1, #self.tiles do
-      for x = 1, #self.tiles[1] do
-          sort[marker] = self.tiles[y][x]
-          marker = marker + 1
+    for x = 1, #self.tiles[y] do
+      self.tiles[y][x] = shuf[y][x]
+    end
+  end
+  --]]
+
+  --[[
+  local xs = {1, 1, 1, 1, 1, 1, 1, 1,
+              2, 2, 2, 2, 2, 2, 2, 2,
+              3, 3, 3, 3, 3, 3, 3, 3,
+              4, 4, 4, 4, 4, 4, 4, 4,
+              5, 5, 5, 5, 5, 5, 5, 5,
+              6, 6, 6, 6, 6, 6, 6, 6,
+              7, 7, 7, 7, 7, 7, 7, 7,
+              8, 8, 8, 8, 8, 8, 8, 8}
+  local ys = {1, 1, 1, 1, 1, 1, 1, 1,
+              2, 2, 2, 2, 2, 2, 2, 2,
+              3, 3, 3, 3, 3, 3, 3, 3,
+              4, 4, 4, 4, 4, 4, 4, 4,
+              5, 5, 5, 5, 5, 5, 5, 5,
+              6, 6, 6, 6, 6, 6, 6, 6,
+              7, 7, 7, 7, 7, 7, 7, 7,
+              8, 8, 8, 8, 8, 8, 8, 8}
+ ]]
+  -- borgar
+
+  -- borgar
+  ----[[
+  local sort, index = {}, 1
+
+  for y = 1, #self.tiles do
+      for x = 1, #self.tiles[y] do
+          table.insert(sort, self.tiles[y][x])
+          -- table.remove(self.tiles[y], x)
+          --index = index + 1
       end
   end
 
   -- randomize elements in 1d board into another 1d array (pop)
-  local shuffle, length = {}, #sort
-  for i = 1, length do
-    local limit = math.random(1, #sort)
-    shuffle[i] = sort[limit]
-    table.remove(sort, limit)
+
+  -- fisher-yates
+  math.randomseed(os.time())
+  local shuffle = {}
+  for i = #sort, 1, -1 do
+    local j = math.random(i)
+    sort[i], sort[j] = sort[j], sort[i]
+    table.insert(shuffle, sort[i])
   end
 
   -- format 2nd 1d array into a new 2d array board
-  marker = 1
+  local mark = 1
   for y = 1, #self.tiles do
-      for x = 1, #self.tiles[1] do
-          self.tiles[y][x] = shuffle[marker]
-          marker = marker + 1
-      end
+    for x = 1, #self.tiles[y] do
+      self.tiles[y][x] = shuffle[mark]
+      self.tiles[y][x].gridY, self.tiles[y][x].gridX = y, x
+      mark = mark + 1
+      -- table.insert(self.tiles[y], shuffle[i])
+    end
   end
+  numShuf = numShuf + 1
+  --]]
+
 end
