@@ -18,6 +18,9 @@
 
 PlayState = Class{__includes = BaseState}
 
+-- borgar
+-- local numShuf = 0
+
 function PlayState:init()
 
     -- start our transition alpha at full, so we fade in
@@ -106,9 +109,17 @@ function PlayState:update(dt)
     end
 
     if self.canInput then
-      if love.keyboard.wasPressed('r') then
-        self.board:shuffle()
-      end 
+        -- borgar
+        if love.keyboard.wasPressed('r') then
+            -- assign shuffle to new 2d array
+            love.graphics.print("Line 115: PlayState", 50, 50)
+            self.board:shuffle()
+            love.graphics.print("Line 117: PlayState", 50, 100)
+
+            -- numShuf = numShuf + 1
+            -- iterate over shuffle board and put into board.tiles
+            borgar()
+        end
 
         -- move cursor around based on bounds of grid, playing sounds
         if love.keyboard.wasPressed('up') then
@@ -180,6 +191,13 @@ function PlayState:update(dt)
 
     Timer.update(dt)
 end
+--[[
+function borgar()
+  love.graphics.setFont(smallFont)
+  love.graphics.setColor(0, 255/255, 0, 255/255)
+  love.graphics.print('shuffle: ' .. tostring(numShuf), VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 10)
+end
+]]
 
 --[[
     Calculates whether any matches were found on the board and tweens the needed
