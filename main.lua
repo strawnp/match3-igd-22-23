@@ -37,6 +37,7 @@ require 'src/Dependencies'
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
+
 -- virtual resolution dimensions
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
@@ -110,6 +111,7 @@ function love.update(dt)
 
     gStateMachine:update(dt)
 
+    
     love.keyboard.keysPressed = {}
 end
 
